@@ -1,0 +1,381 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000001 /* NorthStarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000001; };
+		A10000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000002; };
+		A10000003 /* OCRModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000003; };
+		A10000004 /* DetectModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000004; };
+		A10000005 /* ServerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000005; };
+		A10000006 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000006; };
+		A10000007 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000007; };
+		A10000008 /* DetectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000008; };
+		A10000009 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000009; };
+		A1000000A /* OCRViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000A; };
+		A1000000B /* DetectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000B; };
+		A1000000C /* ServerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000C; };
+		A1000000D /* OCRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000D; };
+		A1000000E /* DetectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000E; };
+		A1000000F /* ServerStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000F; };
+		A10000010 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010; };
+		A10000011 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000011; };
+		A10000012 /* BoundingBoxOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000012; };
+		A10000013 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000013; };
+		A10000014 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000014; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000001 /* NorthStarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthStarApp.swift; sourceTree = "<group>"; };
+		A20000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20000003 /* OCRModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRModels.swift; sourceTree = "<group>"; };
+		A20000004 /* DetectModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectModels.swift; sourceTree = "<group>"; };
+		A20000005 /* ServerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerModels.swift; sourceTree = "<group>"; };
+		A20000006 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		A20000007 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		A20000008 /* DetectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectService.swift; sourceTree = "<group>"; };
+		A20000009 /* ServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerService.swift; sourceTree = "<group>"; };
+		A2000000A /* OCRViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRViewModel.swift; sourceTree = "<group>"; };
+		A2000000B /* DetectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectViewModel.swift; sourceTree = "<group>"; };
+		A2000000C /* ServerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerViewModel.swift; sourceTree = "<group>"; };
+		A2000000D /* OCRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRView.swift; sourceTree = "<group>"; };
+		A2000000E /* DetectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectView.swift; sourceTree = "<group>"; };
+		A2000000F /* ServerStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerStatusView.swift; sourceTree = "<group>"; };
+		A20000010 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000011 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		A20000012 /* BoundingBoxOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBoxOverlay.swift; sourceTree = "<group>"; };
+		A20000013 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
+		A20000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000020 /* NorthStar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NorthStar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000002 /* NorthStar */,
+				A40000010 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000002 /* NorthStar */ = {
+			isa = PBXGroup;
+			children = (
+				A20000001 /* NorthStarApp.swift */,
+				A20000002 /* ContentView.swift */,
+				A40000003 /* Models */,
+				A40000004 /* Services */,
+				A40000005 /* ViewModels */,
+				A40000006 /* Views */,
+				A40000007 /* Utilities */,
+				A20000014 /* Assets.xcassets */,
+				A20000015 /* Info.plist */,
+			);
+			path = NorthStar;
+			sourceTree = "<group>";
+		};
+		A40000003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000003 /* OCRModels.swift */,
+				A20000004 /* DetectModels.swift */,
+				A20000005 /* ServerModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40000004 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000006 /* APIClient.swift */,
+				A20000007 /* OCRService.swift */,
+				A20000008 /* DetectService.swift */,
+				A20000009 /* ServerService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A40000005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000A /* OCRViewModel.swift */,
+				A2000000B /* DetectViewModel.swift */,
+				A2000000C /* ServerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A40000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000D /* OCRView.swift */,
+				A2000000E /* DetectView.swift */,
+				A2000000F /* ServerStatusView.swift */,
+				A20000010 /* SettingsView.swift */,
+				A20000011 /* ImagePicker.swift */,
+				A20000012 /* BoundingBoxOverlay.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A40000007 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A20000013 /* ImageUtils.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A40000010 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20000020 /* NorthStar.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000001 /* NorthStar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000003 /* Build configuration list for PBXNativeTarget "NorthStar" */;
+			buildPhases = (
+				A60000001 /* Sources */,
+				A30000001 /* Frameworks */,
+				A60000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NorthStar;
+			productName = NorthStar;
+			productReference = A20000020 /* NorthStar.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A80000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A50000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A70000001 /* Build configuration list for PBXProject "NorthStar" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000001;
+			productRefGroup = A40000010 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000001 /* NorthStar */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A60000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000014 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A60000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000001 /* NorthStarApp.swift in Sources */,
+				A10000002 /* ContentView.swift in Sources */,
+				A10000003 /* OCRModels.swift in Sources */,
+				A10000004 /* DetectModels.swift in Sources */,
+				A10000005 /* ServerModels.swift in Sources */,
+				A10000006 /* APIClient.swift in Sources */,
+				A10000007 /* OCRService.swift in Sources */,
+				A10000008 /* DetectService.swift in Sources */,
+				A10000009 /* ServerService.swift in Sources */,
+				A1000000A /* OCRViewModel.swift in Sources */,
+				A1000000B /* DetectViewModel.swift in Sources */,
+				A1000000C /* ServerViewModel.swift in Sources */,
+				A1000000D /* OCRView.swift in Sources */,
+				A1000000E /* DetectView.swift in Sources */,
+				A1000000F /* ServerStatusView.swift in Sources */,
+				A10000010 /* SettingsView.swift in Sources */,
+				A10000011 /* ImagePicker.swift in Sources */,
+				A10000012 /* BoundingBoxOverlay.swift in Sources */,
+				A10000013 /* ImageUtils.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A90000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A90000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A90000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NorthStar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NorthStar;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.northstar.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A90000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NorthStar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NorthStar;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.northstar.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000001 /* Build configuration list for PBXProject "NorthStar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90000001 /* Debug */,
+				A90000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000003 /* Build configuration list for PBXNativeTarget "NorthStar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90000003 /* Debug */,
+				A90000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = A80000001 /* Project object */;
+}
