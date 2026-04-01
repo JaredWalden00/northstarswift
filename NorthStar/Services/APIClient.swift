@@ -103,6 +103,48 @@ actor APIClient {
         }
     }
 
+    /// Fetch raw bytes from a URL (for image downloads, etc.).
+    /// Supports both absolute URLs and paths relative to baseURL.
+    func requestData(
+        url urlString: String,
+        authenticated: Bool = false
+    ) async throws -> Data {
+        let resolvedURL: String
+        if urlString.hasPrefix("http://") || urlString.hasPrefix("https://") {
+            resolvedURL = urlString
+        } else {
+            resolvedURL = baseURL + urlString
+        }
+
+        guard let url = URL(string: resolvedURL) else {
+            throw APIError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(UUID().uuidString, forHTTPHeaderField: "X-Request-ID")
+
+        if authenticated {
+            request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+        }
+
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw APIError.networkError(error)
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.networkError(URLError(.badServerResponse))
+        }
+
+        try Self.checkStatus(httpResponse, data: data)
+
+        return data
+    }
+
     // For endpoints returning raw text (e.g., /metrics)
     func requestRaw(
         path: String,

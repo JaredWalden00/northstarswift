@@ -11,10 +11,16 @@ final class DetectViewModel {
     var imagePickerSource: UIImagePickerController.SourceType = .photoLibrary
     var skipDedup = false
 
-    private let service: DetectService
+    /// Which engine actually processed the last request.
+    var usedEngine: String?
 
-    init(client: APIClient) {
-        self.service = DetectService(client: client)
+    private let serverService: DetectService
+    private let visionService = VisionDetectService()
+    private let mode: () -> ProcessingMode
+
+    init(client: APIClient, mode: @escaping () -> ProcessingMode) {
+        self.serverService = DetectService(client: client)
+        self.mode = mode
     }
 
     func runDetection() async {
@@ -22,15 +28,49 @@ final class DetectViewModel {
         isLoading = true
         errorMessage = nil
         detectResult = nil
+        usedEngine = nil
 
-        do {
-            let options = skipDedup ? DetectOptions(skipDedup: true) : nil
-            detectResult = try await service.detect(image: image, options: options)
-        } catch {
-            errorMessage = error.localizedDescription
+        let currentMode = mode()
+
+        switch currentMode {
+        case .server:
+            await runServerDetect(image: image)
+
+        case .onDevice:
+            await runVisionDetect(image: image)
+
+        case .auto:
+            await runServerDetect(image: image)
+            if detectResult == nil {
+                let serverError = errorMessage
+                errorMessage = nil
+                await runVisionDetect(image: image)
+                if detectResult != nil {
+                    errorMessage = "Server unavailable, used on-device Vision. (\(serverError ?? "connection failed"))"
+                }
+            }
         }
 
         isLoading = false
+    }
+
+    private func runServerDetect(image: UIImage) async {
+        do {
+            let options = skipDedup ? DetectOptions(skipDedup: true) : nil
+            detectResult = try await serverService.detect(image: image, options: options)
+            usedEngine = "Server (YOLOv8)"
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func runVisionDetect(image: UIImage) async {
+        do {
+            detectResult = try await visionService.detect(image: image)
+            usedEngine = "On-Device (Apple Vision)"
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func resetScene() async {
@@ -38,7 +78,7 @@ final class DetectViewModel {
         errorMessage = nil
 
         do {
-            _ = try await service.resetScene()
+            _ = try await serverService.resetScene()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -60,5 +100,6 @@ final class DetectViewModel {
         selectedImage = nil
         detectResult = nil
         errorMessage = nil
+        usedEngine = nil
     }
 }

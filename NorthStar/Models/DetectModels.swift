@@ -24,7 +24,7 @@ struct DetectOptions: Codable {
 
 // MARK: - Detect Response
 
-struct DetectResponse: Decodable {
+struct DetectResponse: Codable {
     let requestId: String
     let changed: Bool
     let objects: [DetectedObject]
@@ -38,14 +38,30 @@ struct DetectResponse: Decodable {
         case changed, objects, appeared, disappeared, device
         case timingMs = "timing_ms"
     }
+
+    init(requestId: String, changed: Bool, objects: [DetectedObject], appeared: [DetectedObject], disappeared: [DetectedObject], device: String, timingMs: Double) {
+        self.requestId = requestId
+        self.changed = changed
+        self.objects = objects
+        self.appeared = appeared
+        self.disappeared = disappeared
+        self.device = device
+        self.timingMs = timingMs
+    }
 }
 
-struct DetectedObject: Decodable, Identifiable {
+struct DetectedObject: Codable, Identifiable {
     let label: String
     let confidence: Double
     let bbox: [Double]
 
     var id: String { "\(label)-\(bbox.map { String($0) }.joined(separator: ","))" }
+
+    init(label: String, confidence: Double, bbox: [Double]) {
+        self.label = label
+        self.confidence = confidence
+        self.bbox = bbox
+    }
 }
 
 // MARK: - Scene Reset

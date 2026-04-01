@@ -44,7 +44,7 @@ struct OcrOptions: Codable {
 
 // MARK: - OCR Response
 
-struct OCRResponse: Decodable, Identifiable {
+struct OCRResponse: Codable, Identifiable {
     let requestId: String
     let contentSha256: String
     let width: Int
@@ -63,9 +63,20 @@ struct OCRResponse: Decodable, Identifiable {
         case timingMs = "timing_ms"
         case cache, model
     }
+
+    init(requestId: String, contentSha256: String, width: Int, height: Int, pages: [OCRPage], timingMs: TimingInfo, cache: CacheInfo, model: ModelInfo) {
+        self.requestId = requestId
+        self.contentSha256 = contentSha256
+        self.width = width
+        self.height = height
+        self.pages = pages
+        self.timingMs = timingMs
+        self.cache = cache
+        self.model = model
+    }
 }
 
-struct OCRPage: Decodable, Identifiable {
+struct OCRPage: Codable, Identifiable {
     let pageIndex: Int
     let blocks: [OCRBlock]
     let fullText: String
@@ -77,9 +88,15 @@ struct OCRPage: Decodable, Identifiable {
         case blocks
         case fullText = "full_text"
     }
+
+    init(pageIndex: Int, blocks: [OCRBlock], fullText: String) {
+        self.pageIndex = pageIndex
+        self.blocks = blocks
+        self.fullText = fullText
+    }
 }
 
-struct OCRBlock: Decodable, Identifiable {
+struct OCRBlock: Codable, Identifiable {
     let id: String
     let text: String
     let confidence: Double
@@ -90,9 +107,17 @@ struct OCRBlock: Decodable, Identifiable {
         case id, text, confidence, polygon
         case bboxXyxy = "bbox_xyxy"
     }
+
+    init(id: String, text: String, confidence: Double, polygon: [[Double]], bboxXyxy: [Double]) {
+        self.id = id
+        self.text = text
+        self.confidence = confidence
+        self.polygon = polygon
+        self.bboxXyxy = bboxXyxy
+    }
 }
 
-struct TimingInfo: Decodable {
+struct TimingInfo: Codable {
     let decode: Double
     let preprocess: Double
     let ocrInfer: Double
@@ -104,18 +129,35 @@ struct TimingInfo: Decodable {
         case ocrInfer = "ocr_infer"
         case postprocess, total
     }
+
+    init(decode: Double = 0, preprocess: Double = 0, ocrInfer: Double = 0, postprocess: Double = 0, total: Double = 0) {
+        self.decode = decode
+        self.preprocess = preprocess
+        self.ocrInfer = ocrInfer
+        self.postprocess = postprocess
+        self.total = total
+    }
 }
 
-struct CacheInfo: Decodable {
+struct CacheInfo: Codable {
     let hit: Bool
     let key: String?
+
+    init(hit: Bool = false, key: String? = nil) {
+        self.hit = hit
+        self.key = key
+    }
 }
 
-struct ModelInfo: Decodable {
+struct ModelInfo: Codable {
     let paddleocrVersion: String
 
     enum CodingKeys: String, CodingKey {
         case paddleocrVersion = "paddleocr_version"
+    }
+
+    init(paddleocrVersion: String) {
+        self.paddleocrVersion = paddleocrVersion
     }
 }
 

@@ -129,12 +129,21 @@ struct DetectView: View {
                 Text("Results")
                     .font(.headline)
                 Spacer()
+                if let engine = viewModel.usedEngine {
+                    Label(engine, systemImage: result.device.contains("Apple") ? "iphone" : "server.rack")
+                        .font(.caption2)
+                        .foregroundStyle(.blue)
+                }
+            }
+
+            HStack {
                 Label(
                     result.changed ? "Scene Changed" : "No Change",
                     systemImage: result.changed ? "arrow.triangle.2.circlepath" : "checkmark.circle"
                 )
                 .font(.caption)
                 .foregroundStyle(result.changed ? .orange : .green)
+                Spacer()
 
                 Text("\(String(format: "%.0f", result.timingMs)) ms")
                     .font(.caption)

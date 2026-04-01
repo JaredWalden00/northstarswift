@@ -112,11 +112,20 @@ struct OCRView: View {
                 Text("Results")
                     .font(.headline)
                 Spacer()
+                if let engine = viewModel.usedEngine {
+                    Label(engine, systemImage: result.model.paddleocrVersion == "Apple Vision" ? "iphone" : "server.rack")
+                        .font(.caption2)
+                        .foregroundStyle(.blue)
+                }
+            }
+
+            HStack {
                 if result.cache.hit {
                     Label("Cached", systemImage: "bolt.fill")
                         .font(.caption)
                         .foregroundStyle(.orange)
                 }
+                Spacer()
                 Text("\(String(format: "%.0f", result.timingMs.total)) ms")
                     .font(.caption)
                     .foregroundStyle(.secondary)

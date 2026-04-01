@@ -10,10 +10,16 @@ final class OCRViewModel {
     var showImagePicker = false
     var imagePickerSource: UIImagePickerController.SourceType = .photoLibrary
 
-    private let service: OCRService
+    /// Which engine actually processed the last request.
+    var usedEngine: String?
 
-    init(client: APIClient) {
-        self.service = OCRService(client: client)
+    private let serverService: OCRService
+    private let visionService = VisionOCRService()
+    private let mode: () -> ProcessingMode
+
+    init(client: APIClient, mode: @escaping () -> ProcessingMode) {
+        self.serverService = OCRService(client: client)
+        self.mode = mode
     }
 
     func runOCR() async {
@@ -21,14 +27,49 @@ final class OCRViewModel {
         isLoading = true
         errorMessage = nil
         ocrResult = nil
+        usedEngine = nil
 
-        do {
-            ocrResult = try await service.ocr(image: image)
-        } catch {
-            errorMessage = error.localizedDescription
+        let currentMode = mode()
+
+        switch currentMode {
+        case .server:
+            await runServerOCR(image: image)
+
+        case .onDevice:
+            await runVisionOCR(image: image)
+
+        case .auto:
+            // Try server first, fall back to on-device
+            await runServerOCR(image: image)
+            if ocrResult == nil {
+                let serverError = errorMessage
+                errorMessage = nil
+                await runVisionOCR(image: image)
+                if ocrResult != nil {
+                    errorMessage = "Server unavailable, used on-device Vision. (\(serverError ?? "connection failed"))"
+                }
+            }
         }
 
         isLoading = false
+    }
+
+    private func runServerOCR(image: UIImage) async {
+        do {
+            ocrResult = try await serverService.ocr(image: image)
+            usedEngine = "Server (PaddleOCR)"
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func runVisionOCR(image: UIImage) async {
+        do {
+            ocrResult = try await visionService.ocr(image: image)
+            usedEngine = "On-Device (Apple Vision)"
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func pickFromLibrary() {
@@ -45,5 +86,6 @@ final class OCRViewModel {
         selectedImage = nil
         ocrResult = nil
         errorMessage = nil
+        usedEngine = nil
     }
 }
