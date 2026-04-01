@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ServerStatusView: View {
-    @Bindable var viewModel: ServerViewModel
+    var viewModel: ServerViewModel
 
     var body: some View {
         NavigationStack {
@@ -19,29 +19,35 @@ struct ServerStatusView: View {
                     )
                 }
 
-                if viewModel.isReady {
-                    Section("Engine Info") {
+                Section("Engine Info") {
+                    if viewModel.isReady {
                         if let version = viewModel.paddleocrVersion {
                             LabeledContent("PaddleOCR", value: "v\(version)")
                         }
                         if let device = viewModel.yoloDevice {
                             LabeledContent("YOLO Device", value: device.uppercased())
                         }
+                    } else {
+                        Text("Waiting for server...")
+                            .foregroundStyle(.secondary)
                     }
                 }
 
-                if let error = viewModel.errorMessage {
-                    Section {
+                Section("Error") {
+                    if let error = viewModel.errorMessage {
                         HStack {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.red)
                             Text(error)
                                 .font(.callout)
                         }
+                    } else {
+                        Text("No errors")
+                            .foregroundStyle(.secondary)
                     }
                 }
 
-                Section {
+                Section("Actions") {
                     Button {
                         Task { await viewModel.fetchMetrics() }
                     } label: {
@@ -50,11 +56,14 @@ struct ServerStatusView: View {
                     .disabled(viewModel.isLoading)
                 }
 
-                if let metrics = viewModel.metricsText {
-                    Section("Metrics") {
+                Section("Metrics") {
+                    if let metrics = viewModel.metricsText {
                         Text(metrics)
                             .font(.system(.caption, design: .monospaced))
                             .textSelection(.enabled)
+                    } else {
+                        Text("Tap button above to load metrics")
+                            .foregroundStyle(.secondary)
                     }
                 }
             }

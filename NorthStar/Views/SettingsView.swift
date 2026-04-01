@@ -35,7 +35,7 @@ struct SettingsView: View {
                     Text("**Auto**: tries the server first; if it fails, falls back to Apple Vision on-device.\n**Server Only**: always uses the remote API.\n**On-Device Only**: uses Apple Vision framework — works offline, no server needed.")
                 }
 
-                Section("Server Configuration") {
+                Section {
                     LabeledContent("Base URL") {
                         TextField("http://localhost:8000", text: $baseURL)
                             .textContentType(.URL)
@@ -56,6 +56,8 @@ struct SettingsView: View {
                             .multilineTextAlignment(.trailing)
                             .font(.callout.monospaced())
                     }
+                } header: {
+                    Text("Server Configuration")
                 } footer: {
                     Text("Capture endpoint: a GET request is sent here to trigger a remote camera. Can be a path (appended to Base URL) or a full URL.")
                 }
