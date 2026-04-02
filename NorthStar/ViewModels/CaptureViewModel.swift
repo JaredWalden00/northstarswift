@@ -19,11 +19,15 @@ final class CaptureViewModel {
     /// What to do after capturing: nothing, OCR, or detect.
     var autoProcess: AutoProcess = .none
 
+    /// Read OCR text aloud after processing.
+    var speakResults = true
+
     private let captureService: CaptureService
     private let ocrServerService: OCRService
     private let detectServerService: DetectService
     private let visionOCR = VisionOCRService()
     private let visionDetect = VisionDetectService()
+    private let speech = SpeechService.shared
     private let mode: () -> ProcessingMode
 
     enum AutoProcess: String, CaseIterable, Identifiable {
@@ -48,6 +52,7 @@ final class CaptureViewModel {
         isCapturing = true
         errorMessage = nil
         clearResults()
+        speech.stop()
 
         do {
             capturedImage = try await captureService.capture(endpoint: endpoint)
@@ -74,6 +79,9 @@ final class CaptureViewModel {
                 group.addTask { await self.runDetection(on: image) }
             }
         }
+
+        // Speak results after processing
+        speakOCRIfEnabled()
     }
 
     // MARK: - OCR
@@ -98,6 +106,9 @@ final class CaptureViewModel {
         }
 
         isProcessing = false
+
+        // Speak if triggered manually (not from capture flow which handles it)
+        speakOCRIfEnabled()
     }
 
     private func runServerOCR(_ image: UIImage) async {
@@ -160,12 +171,32 @@ final class CaptureViewModel {
         }
     }
 
+    // MARK: - Text to Speech
+
+    func speakOCRIfEnabled() {
+        guard speakResults, let result = ocrResult else { return }
+
+        let fullText = result.pages.map(\.fullText).joined(separator: ". ")
+        guard !fullText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+
+        speech.speak(fullText)
+    }
+
+    func stopSpeaking() {
+        speech.stop()
+    }
+
+    var isSpeaking: Bool {
+        speech.isSpeaking
+    }
+
     // MARK: - Clear
 
     func clear() {
         capturedImage = nil
         clearResults()
         errorMessage = nil
+        speech.stop()
     }
 
     private func clearResults() {
