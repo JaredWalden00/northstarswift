@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NorthStar Capture Server</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .subtitle {
+      color: #888;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    .video-container {
+      position: relative;
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 2px solid #333;
+      max-width: 640px;
+      width: 100%;
+    }
+    video, canvas {
+      width: 100%;
+      display: block;
+    }
+    canvas { display: none; }
+    .live-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #e33;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: none;
+    }
+    .live-badge.active { display: block; }
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-start { background: #2d8cf0; color: white; }
+    .btn-start:hover:not(:disabled) { background: #1a6fd1; }
+    .btn-capture { background: #e33; color: white; }
+    .btn-capture:hover:not(:disabled) { background: #c22; }
+    .btn-auto { background: #2a2a2a; color: #ccc; border: 1px solid #444; }
+    .btn-auto.active { background: #1a6f1a; color: white; border-color: #2a8f2a; }
+    .btn-stop { background: #2a2a2a; color: #ccc; border: 1px solid #444; }
+    .btn-stop:hover:not(:disabled) { background: #333; }
+    .btn-upload { background: #6a5acd; color: white; }
+    .btn-upload:hover:not(:disabled) { background: #5a4abd; }
+    .status-bar {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 12px 16px;
+      max-width: 640px;
+      width: 100%;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+    .status-bar .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .status-bar .row:last-child { margin-bottom: 0; }
+    .status-bar .label { color: #888; }
+    .status-bar .value { color: #fff; font-weight: 500; }
+    .auto-settings {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+    .auto-settings select {
+      background: #222;
+      color: #ccc;
+      border: 1px solid #444;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .drop-zone {
+      border: 2px dashed #444;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 640px;
+      width: 100%;
+      text-align: center;
+      color: #666;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .drop-zone.drag-over {
+      border-color: #2d8cf0;
+      color: #2d8cf0;
+      background: rgba(45, 140, 240, 0.05);
+    }
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <h1>NorthStar Capture Server</h1>
+  <p class="subtitle">Webcam feed for your iPhone app</p>
+
+  <div class="video-container">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+    <div id="liveBadge" class="live-badge">LIVE</div>
+  </div>
+
+  <div class="controls">
+    <button id="btnStart" class="btn-start" onclick="startWebcam()">Start Webcam</button>
+    <button id="btnCapture" class="btn-capture" onclick="captureFrame()" disabled>Capture</button>
+    <button id="btnAuto" class="btn-auto" onclick="toggleAuto()">Auto Capture: OFF</button>
+    <button id="btnStop" class="btn-stop" onclick="stopWebcam()" disabled>Stop</button>
+  </div>
+
+  <div class="auto-settings">
+    <span>Auto interval:</span>
+    <select id="intervalSelect" onchange="updateInterval()">
+      <option value="500">0.5s</option>
+      <option value="1000" selected>1s</option>
+      <option value="2000">2s</option>
+      <option value="5000">5s</option>
+      <option value="10000">10s</option>
+    </select>
+  </div>
+
+  <br />
+
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    Drop an image here or click to upload a file instead of using the webcam
+  </div>
+  <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" />
+
+  <div class="status-bar" id="statusBar">
+    <div class="row">
+      <span class="label">Status</span>
+      <span class="value" id="statusText">Webcam not started</span>
+    </div>
+    <div class="row">
+      <span class="label">Frames sent</span>
+      <span class="value" id="frameCount">0</span>
+    </div>
+    <div class="row">
+      <span class="label">Last capture</span>
+      <span class="value" id="lastCapture">-</span>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const liveBadge = document.getElementById("liveBadge");
+
+    let stream = null;
+    let autoCapture = false;
+    let autoInterval = null;
+    let intervalMs = 1000;
+    let framesSent = 0;
+
+    // ── Webcam ──
+
+    async function startWebcam() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "environment" },
+          audio: false,
+        });
+        video.srcObject = stream;
+        liveBadge.classList.add("active");
+        document.getElementById("btnStart").disabled = true;
+        document.getElementById("btnCapture").disabled = false;
+        document.getElementById("btnStop").disabled = false;
+        updateStatus("Webcam active - ready to capture");
+      } catch (err) {
+        updateStatus("Camera error: " + err.message);
+      }
+    }
+
+    function stopWebcam() {
+      if (stream) {
+        stream.getTracks().forEach((t) => t.stop());
+        stream = null;
+      }
+      video.srcObject = null;
+      liveBadge.classList.remove("active");
+      stopAuto();
+      document.getElementById("btnStart").disabled = false;
+      document.getElementById("btnCapture").disabled = true;
+      document.getElementById("btnStop").disabled = true;
+      updateStatus("Webcam stopped");
+    }
+
+    // ── Capture ──
+
+    async function captureFrame() {
+      // Grab frame from video
+      canvas.width = video.videoWidth || 1280;
+      canvas.height = video.videoHeight || 720;
+      ctx.drawImage(video, 0, 0);
+
+      const dataURL = canvas.toDataURL("image/jpeg", 0.9);
+      await sendFrame(dataURL);
+    }
+
+    async function sendFrame(dataURL) {
+      try {
+        const resp = await fetch("/api/frame", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: dataURL }),
+        });
+        const data = await resp.json();
+        framesSent = data.captureCount;
+        document.getElementById("frameCount").textContent = framesSent;
+        document.getElementById("lastCapture").textContent = new Date().toLocaleTimeString();
+        updateStatus("Frame sent (#" + framesSent + ")");
+      } catch (err) {
+        updateStatus("Send error: " + err.message);
+      }
+    }
+
+    // ── Auto capture ──
+
+    function toggleAuto() {
+      autoCapture = !autoCapture;
+      const btn = document.getElementById("btnAuto");
+      if (autoCapture) {
+        btn.textContent = "Auto Capture: ON";
+        btn.classList.add("active");
+        autoInterval = setInterval(captureFrame, intervalMs);
+        updateStatus("Auto capture every " + intervalMs + "ms");
+      } else {
+        stopAuto();
+      }
+    }
+
+    function stopAuto() {
+      autoCapture = false;
+      if (autoInterval) clearInterval(autoInterval);
+      autoInterval = null;
+      const btn = document.getElementById("btnAuto");
+      btn.textContent = "Auto Capture: OFF";
+      btn.classList.remove("active");
+    }
+
+    function updateInterval() {
+      intervalMs = parseInt(document.getElementById("intervalSelect").value);
+      if (autoCapture) {
+        clearInterval(autoInterval);
+        autoInterval = setInterval(captureFrame, intervalMs);
+      }
+    }
+
+    // ── File upload / drag & drop ──
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      readAndSend(file);
+    }
+
+    const dropZone = document.getElementById("dropZone");
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("drag-over");
+    });
+    dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag-over"));
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("drag-over");
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith("image/")) readAndSend(file);
+    });
+
+    function readAndSend(file) {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        await sendFrame(reader.result);
+        updateStatus("Uploaded: " + file.name);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ── Helpers ──
+
+    function updateStatus(msg) {
+      document.getElementById("statusText").textContent = msg;
+    }
+  </script>
+</body>
+</html>
