@@ -134,27 +134,6 @@ struct RemoteCaptureView: View {
             }
             .pickerStyle(.segmented)
 
-            // TTS controls
-            HStack {
-                Toggle(isOn: $viewModel.speakResults) {
-                    Label("Read Aloud", systemImage: "speaker.wave.2")
-                        .font(.caption)
-                }
-                .toggleStyle(.button)
-                .tint(viewModel.speakResults ? .green : .gray)
-
-                if viewModel.isSpeaking {
-                    Button {
-                        viewModel.stopSpeaking()
-                    } label: {
-                        Label("Stop", systemImage: "stop.fill")
-                            .font(.caption)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.red)
-                }
-            }
-
             // Manual process buttons (when image exists but no auto-process)
             if let image = viewModel.capturedImage {
                 HStack(spacing: 12) {
